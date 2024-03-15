@@ -12,7 +12,7 @@ async def command(client: disnake.Client, message: disnake.Message, _):
         safe_assert(type(message.guild) == disnake.guild.Guild)
         safe_assert(type(message.author) == disnake.Member)
     except:
-        return await message.channel.send("Unable to identify caller/You tried to use this in a DM.")
+        return await message.channel.send("Komudu çağıran kişiyi anlayamadım/Bu komudu DM'de kullanıyorsunuz.")
 
     # (Asserted above)
     caller = typing.cast(disnake.Member, message.author)
@@ -26,7 +26,7 @@ async def command(client: disnake.Client, message: disnake.Message, _):
         return  # No response if not staff
 
     if not type(message.channel) == disnake.TextChannel:
-        return await message.channel.send("I can't lock down this channel type.")
+        return await message.channel.send("Bu türden bir kanalı kilitleyemiyorum.")
 
     # (Asserted above)
     msg_channel: disnake.TextChannel = message.channel  # type: ignore
@@ -43,8 +43,12 @@ async def command(client: disnake.Client, message: disnake.Message, _):
         await msg_channel.set_permissions(
             server_roles['mod_bots'],
             send_messages=True)  # Mod bots can always talk
-    return await message.channel.send(f"{'Un-' if not permissions.send_messages else ''}Lockdowned channel.")
-aliases = ["lockdown"]
+    return await message.channel.send(f"{'Un-' if not permissions.send_messages else ''}Lockdown\'ladım.")
+
+aliases = [
+    "lockdown",
+    "kilitle"
+]
 
 def safe_assert(expr: bool):
     '''

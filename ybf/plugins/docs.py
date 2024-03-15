@@ -14,8 +14,8 @@ def addNewCommand(command):
     docs[command.aliases[0]] = {
         'aliases' : command.aliases,
         'description_small' : 'N/A',
-        'description' : 'No description provided.',
-        'usage' : 'No usage example provided.',
+        'description' : 'Açıklama temin edilmedi.',
+        'usage' : 'Kullanım örneği temin edilmedi.',
         'hidden' : False
     }
 
@@ -32,7 +32,7 @@ async def ready(client):
                 globals()["export"] = True
 
     except FileNotFoundError:
-        print('Writing new docs file: one wasn\'t found')
+        print('Yeni doküman dosyası oluşturuluyor: dizinde dosya bulunamadı')
         for command in commands.iterable:
             addNewCommand(command)
         globals()["export"] = True
@@ -42,7 +42,7 @@ async def command(client, message, command):
     # help
     if len(context) == 1:
         helpmsg = discord.Embed(
-            title='Available Commands:',
+            title='Kullanılabilir Komutlar:',
             color=client.colors['default']
         )
 
@@ -65,7 +65,8 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    'You are not allowed to modify help descriptions.'
+                    'Yardım komudu açıklamalarını düzenleme ' \
+                    'yetkisine sahip değilsiniz.'
                 )
             )
 
@@ -74,10 +75,10 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    '`set` requires 3 additional parameters to work. '\
+                    '`set`\'in çalışması için 3 ek parametre lazım. '\
                     '(`help set command "property" "value"`)\n'\
-                    'Valid properties are `description`, `description_small`, '\
-                    '`usage`, and `hidden`.')
+                    'Geçerli property\'ler: `description`, `description_small`, '\
+                    '`usage`, ve `hidden`.')
                 )
 
         identified = None
@@ -89,7 +90,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    f'Command {setting[1]} not found.')
+                    f'{setting[1]} komudu bulunamadı.')
                 )
 
         if setting[2].lower() == 'hidden':
@@ -97,8 +98,8 @@ async def command(client, message, command):
                 return await message.channel.send(
                     embed=client.embed_builder(
                         'error',
-                        '`hidden` is a boolean, and can only take `True` or '\
-                        '`False` as a value.')
+                        '`hidden` boolean türünde, yalnızca `True` veya '\
+                        '`False` değerlerini alabilir.')
                     )
 
             if setting[3].lower() == 'true':
@@ -112,8 +113,8 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'default',
-                'Information successfully updated.',
-                title='Success')
+                'Değerler sorunsuzca güncellendi.',
+                title='Başarı')
             )
 
     # help command
@@ -125,11 +126,11 @@ async def command(client, message, command):
                 color=client.colors['default']
             )
             helpmsg.add_field(
-                name='Usage',
+                name='Kullanım',
                 value=docs[command]['usage'],
                 inline=False)
             helpmsg.add_field(
-                name='Aliases',
+                name='Alias\'lar',
                 value=docs[command]['aliases'],
                 inline=False)
 
@@ -138,8 +139,8 @@ async def command(client, message, command):
     return await message.channel.send(
         embed=client.embed_builder(
             'error',
-            'Command not found. Try just `help` to see all my commands.',
-            title='Not Found'
+            'Komut bulunamadı. `help` ile tüm komutlarımı görmeyi deneyebilirsin.',
+            title='Bulunamadı'
         )
     )
 
@@ -153,5 +154,6 @@ aliases = [
     'help',
     'docs',
     'whatis',
-    'whats'
+    'whats',
+    'yardım',
 ]

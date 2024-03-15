@@ -12,7 +12,7 @@ async def ready(client):
             globals()['rules'] = json.load(data)
 
     except FileNotFoundError:
-        print('Writing new rules file: one wasn\'t found')
+        print('Kural dosyası bulamadım o yüzden yenisini oluşturuyorum.')
         globals()['rules'] = {
             'start_at' : 1,
             'simple' : [
@@ -31,7 +31,7 @@ async def command(client, message, command):
 
     if len(context) == 1:
         helpmsg = discord.Embed(
-            title='List of Rules:',
+            title='Kurallar Listesi:',
             description = '',
             color=client.colors['default']
         )
@@ -40,7 +40,7 @@ async def command(client, message, command):
             index = i + rules['start_at']
             helpmsg.description += f'{index}: {rule}\n'
 
-        helpmsg.set_footer(text='More information about these rules can be accessed with "rule #".')
+        helpmsg.set_footer(text='Bu kurallarla ilgili daha fazla bilgi "kural #" komuduyla edinilebilir.')
 
         return await message.channel.send(embed=helpmsg)
 
@@ -49,7 +49,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    'You are not allowed to modify rules.'
+                    'Kuralları düzenlemeye yetkiniz yok.'
                 )
             )
 
@@ -60,8 +60,8 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    '`set` requires 2 additional parameters to work. '
-                    '(`rule set "name" "value"`)'
+                    '`set` 2 ek parametre gerektirir. '
+                    '(`rule set "isim" "değer"`)'
                 )
             )
 
@@ -70,7 +70,7 @@ async def command(client, message, command):
                 embed=client.embed_builder(
                     'default',
                     [rule_name for rule_name in rules['extended']],
-                    title='List of Rules'
+                    title='Kurallar Listesi'
                 )
             )
 
@@ -81,8 +81,8 @@ async def command(client, message, command):
                 return await message.channel.send(
                     embed=client.embed_builder(
                         'error',
-                        '`set simple` requires 1 additional parameter to work. '
-                        '(`rule set simple "name" "value"`)'
+                        '`set simple` 1 ek parametre gerektirir. '
+                        '(`rule set simple "isim" "değer"`)'
                     )
                 )
 
@@ -92,7 +92,7 @@ async def command(client, message, command):
                 return await message.channel.send(
                     embed=client.embed_builder(
                         'error',
-                        'Only numbered rules can have simple descriptions.'
+                        'Yalnızca başında sayı olan kuralların basit açıklamaları olabilir.'
                     )
                 )
 
@@ -101,8 +101,8 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'default',
-                    f'Successfully set rule {setting[1]}\'s simple description.',
-                    title='Done'
+                    f'{setting[1]} kuralının basit açıklaması başarıyla ayarlandı.',
+                    title='Yaptım be!'
                 )
             )
 
@@ -113,7 +113,7 @@ async def command(client, message, command):
                 return await message.channel.send(
                     embed=client.embed_builder(
                         'error',
-                        'You can only use numbers to order rules.'
+                        'Kuralları sıralamak için yalnızca sayıları kullanabilirsiniz.'
                     )
                 )
 
@@ -126,15 +126,17 @@ async def command(client, message, command):
                     embed=client.embed_builder(
                         'warning',
                         'Adding a new simple rule description to accomodate the '
-                        'new rule.',
-                        title='Warning'
+                        'new rule. '
+                        '(ç.n. bu hata ne için çıkıyor bakmak istemiyorum saat 02.16 aw) '
+                        '(denk gelirsen anlarsın zaten ne olduğunu, sonra git çevir)',
+                        title='Uyarı'
                     )
                 )
             elif command - len(rules['simple']) > 1:
                 return await message.channel.send(
                     embed=client.embed_builder(
                         'error',
-                        'You cannot skip a number in numbered rules.'
+                        'Numaralandırılmış kurallarda sayı atlayamazsınız.'
                     )
                 )
         except ValueError:
@@ -146,17 +148,17 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'default',
-                f'Successfully set rule {setting[1]}.',
-                title='Done'
-            ).set_footer(text='You may also want to change the simple description too.')
+                f'{setting[1]} başarıyla ayarlandı.',
+                title='Yaptım be!'
+            ).set_footer(text='Basit açıklamayı da değiştirmek isteyebilirsin.')
         )
 
     if context[1] not in rules['extended']:
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'No information found on that rule.',
-                title='Not Found'
+                'Bu kurala dair açıklama bulunamadı.',
+                title='Bulunamadı'
             )
         )
 
@@ -175,5 +177,6 @@ async def close(client):
 
 aliases = [
     'rules',
-    'rule'
+    'rule',
+    'kural',
 ]

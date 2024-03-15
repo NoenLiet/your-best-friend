@@ -25,16 +25,16 @@ async def command(client, message, command):
     # print(c)
     
     if c == 'on' or c == 'true':
-        await message.channel.send('Turning anti-react on.')
+        await message.channel.send('Anti-react\'ı açtım.')
         active = True
     elif c == 'off' or c == 'false':
-        await message.channel.send('Turning anti-react off.')
+        await message.channel.send('Anti-react\'ı kapattım.')
         active = False
     
     if c == 'off' or c == 'false' or c == 'clear':
         reactions = {}
         warned = []
-        await message.channel.send('Cleared warned users.')
+        await message.channel.send('Uyarılmış kullanıcılar temizlendi.')
 
 async def react(client, payload):
     if not active: return
@@ -80,11 +80,11 @@ async def reactRemove(client, payload):
             # print('Warning.')
             warned.append(payload.user_id)
             await channel.send(
-                content=f'***WARNING:*** <@{payload.user_id}> has triggered '
-                         'reaction quickdelete.\n'
-                         'Please allow a 3 second breadth between reactions.\n'
-                         '*You will be automatically muted on the second '
-                         'infraction.*\n'
+                content=f'***UYARI:*** <@{payload.user_id}> hızlıca tepki '
+                         'silmeyi tetikledi.\n'
+                         'Lütfen tepkiler arasında 3 saniye boşluk bırakın.\n'
+                         '*İkinci ihlâlde otomatik olarak  '
+                         'susturulacaksınız.*\n'
                         f'<@&{staff_id}>'
                 )
         else:
@@ -95,10 +95,11 @@ async def reactRemove(client, payload):
                     client.stored_roles[channel.guild.id]['rolebanned']
                 ]
             )
-            await channel.send(f'<@{payload.user_id} has been rolebanned for '
-                                'multiple reaction quick-deletes.'
+            await channel.send(f'<@{payload.user_id} birden fazla hızlıca tepki '
+                                'silme eyleminden dolayı rolebanlandı.'
                                f'<@&{staff_id}>')
 
 aliases = [
-    'react'
+    'react',
+    'tepki'
 ]

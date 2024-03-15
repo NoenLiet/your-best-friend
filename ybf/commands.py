@@ -6,7 +6,7 @@ import os
 all_commands = {}
 iterable = []
 
-print('Importing plugins...')
+print('Pluginler içeri aktarılıyor...')
 
 # add all plugins in plugin folder
 for plugin in os.scandir('./ybf/plugins'):

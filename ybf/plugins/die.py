@@ -22,10 +22,10 @@ async def command(client, message, command):
         embed=client.embed_builder(
             'error',
             choice([
-                'I don\'t die THAT easily!',
-                'I can help... I can help... Please don\'t kill me...',
-                'You might *think* I\'m dead...',
-                '* Retreats into soil *'
+                'O kadar kolay ölmem!',
+                'Yardım edebilirim... Yardım edebilirim... Lütfen beni öldürme...',
+                'Gerçekten öleceğimi mi sandınız?...',
+                '* Toza dönüşür *'
                 ]),
             title=None))
     return await client.close()
@@ -37,5 +37,10 @@ async def command(client, message, command):
 aliases = [
     'shutdown',
     'exit',
-    'die'
+    'die',
+    'kapa',
+    'kapat',
+    'çık',
+    'geber',
+    'öl'
 ]

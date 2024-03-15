@@ -6,7 +6,7 @@ async def command(client, message, command):
       client.stored_roles[message.guild.id]['staff'] not in message.author.roles:
         return
 
-    ban_reason = "Mass Ban: No reason provided."
+    ban_reason = "Toplu Ban: Sebep sunulmadı."
     bans = split(command)
     bans.pop(0)
     
@@ -15,12 +15,12 @@ async def command(client, message, command):
     except ValueError:
         ban_reason = bans.pop(0)
     
-    ban_reason = f'[Ban by {message.author.name}#{message.author.discriminator}] {ban_reason}'
+    ban_reason = f'[Ban {message.author.name}#{message.author.discriminator} tarafından atıldı] {ban_reason}'
 
     banamt = len(bans)
 
     msg = await message.reply(
-        content=f'Banning {banamt} users...',
+        content=f'{banamt} sayıda kullanıcıyı banlıyorum...',
         mention_author=False
     )
 
@@ -31,15 +31,15 @@ async def command(client, message, command):
                 reason=ban_reason
             )
             await msg.edit(
-                content=f'Banned <@{dumb}> from the server.\n\n{banamt - i+1} bans remaining...'
+                content=f'<@{dumb}> sunucudan banlandı.\n\n{banamt - i+1} tane ban kaldı...'
             )
         except disnake.HTTPException:
             await msg.edit(
-                content=f'Couldn\'t ban <@{dumb}> from the server. (Are they already banned?)\n\n{banamt - i+1} bans remaining...'
+                content=f'<@{dumb}> denen malı banlayamadım. (Hâlihazırda banlanmış olabilirler mi?)\n\n{banamt - i+1} tane ban kaldı...'
             )
     
     await msg.edit(
-        content='All users banned.'
+        content='Bütün kullanıcılar banlandı.'
     )
 
 aliases = [

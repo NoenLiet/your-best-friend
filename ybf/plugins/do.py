@@ -7,7 +7,7 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'You do not have permission to perform debug operations.'
+                'Debug işlemi gerçekleştirme yetkiniz yok.'
             )
         )
 
