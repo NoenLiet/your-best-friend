@@ -46,8 +46,8 @@ async def finisher(destination, content, type='error', title='Error'):
             title=title,
             color=color
         ).set_footer(
-            text='These commands are rarely checked for consistency. Take care '
-            'when modifying these settings.'
+            text='Bu komutlar nadiren tutarlılığı var mı yok mu diye kontrol edilir. Düzenlerken '
+            'dikkat et yani.'
         )
     )
 
@@ -57,7 +57,7 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'You are not allowed to modify settings.'
+                'Ayarları düzenleme yetkin yok.'
             )
         )
 
@@ -70,15 +70,15 @@ async def command(client, message, command):
             message.channel,
             str(settings_items),
             type='default',
-            title='Available Settings'
+            title='Kullanılabilir Ayarlar'
         )
 
     if context[0] not in settings_items:
         # couldnt find that setting
         return await finisher(
             message.channel,
-            f'{context[0]} is not an available setting.\n'
-            'Simply type `set` to see all available options.'
+            f'{context[0]} mevcut bir ayar değil.\n'
+            'Tüm ayarları görmek istiyorsan `set` yaz yeter.'
         )
 
     thing_to_check = getattr(settings, context[0])
@@ -93,13 +93,13 @@ async def command(client, message, command):
                     message.channel,
                     str(thing_to_check),
                     type='default',
-                    title=f'Current setting for {name_of_thing_to_check}'
+                    title=f'{name_of_thing_to_check} için mevcut değer'
                 )
             return await finisher(
                 message.channel,
                 str(list(thing_to_check)),
                 type='default',
-                title=f'Available Settings for {name_of_thing_to_check}'
+                title=f'{name_of_thing_to_check} için mevcut ayarlar'
             )
 
         if isinstance(thing_to_check, dict):
@@ -109,8 +109,8 @@ async def command(client, message, command):
             if context[0] not in thing_to_check:
                 return await finisher(
                     message.channel,
-                    f'Couldn\'t find `{context[0]}` in `{name_of_thing_to_check}`.\n'
-                    '\nAdding additional items to dictionaries is not supported yet.'
+                    f'`{context[0]}` ayarını `{name_of_thing_to_check}` içinde bulamadım.\n'
+                    '\nDictionary\'lere yeni entry eklemek henüz desteklenmiyor.'
                 )
                 # im going to hope i dont need to add shit to dictionaries yet
 
@@ -125,9 +125,9 @@ async def command(client, message, command):
                     export_it()
                     return await finisher(
                         message.channel,
-                        f'Successfully changed `{name_of_thing_to_check}`\'s `{context[0]}` to `{context[1]}`',
+                        f'`{name_of_thing_to_check}` ayarının `{context[0]}` değeri başarıyla `{context[1]}` olarak değiştirildi',
                         type='default',
-                        title='Success'
+                        title='Başarılı'
                     )
                 except IndexError:
                     # no context[1]? just move on to set it as thingtocheck
@@ -151,8 +151,8 @@ async def command(client, message, command):
                     ):
                         return await finisher(
                             message.channel,
-                            f'`{name_of_thing_to_check}` needs to be formatted '
-                            'like a list (ex: `["one", 2]`).'
+                            f'`{name_of_thing_to_check}` liste şeklinde '
+                            'formatlanmalıdır (örnek: `["bir", 2]`).'
                         )
 
                     # shlex to get a list, removing the braces
@@ -170,7 +170,7 @@ async def command(client, message, command):
                     if len(context[1]) != 2: # too many cooks!
                         return await finisher(
                             message.channel,
-                            f'`{name_of_thing_to_check}` requires a two-object list.'
+                            f'`{name_of_thing_to_check}` iki nesne gerektiren bir listedir.'
                         )
 
                 if len(thing_to_check) > 0:
@@ -183,50 +183,50 @@ async def command(client, message, command):
                     export_it()
                     return await finisher(
                         message.channel,
-                        f'Successfully added that to the list `{name_of_thing_to_check}`',
+                        f'`{name_of_thing_to_check}` listesine başarıyla ekledim.',
                         type='default',
-                        title='Success'
+                        title='Başarılı'
                     )
                 if context[0] in minus:
                     thing_to_check.remove(context[1])
                     export_it()
                     return await finisher(
                         message.channel,
-                        f'Successfully removed that from the list `{name_of_thing_to_check}`',
+                        f'`{name_of_thing_to_check}` listesinden başarıyla çıkardım.',
                         type='default',
-                        title='Success'
+                        title='Başarılı'
                     )
             except IndexError:
                 # context[0] exists but context[1] doesn't
                 return await finisher(
                     message.channel,
-                    'You did not specify something to add or remove from the list'
+                    'Listeye eklenip çıkarılacak bir şey belirtmediniz.'
                 )
             except ValueError as e:
                 if str(e).startswith('ValueError: invalid literal'):
                     # tried to put a string in a list of ints
                     return await finisher(
                         message.channel,
-                        'Couldn\'t convert your input to an integer. Maybe you mispelled it?'
+                        'Girdinizi tamsayıya çeviremedim. Yanlış girmiş olabilir misin?'
                     )
 
                 # tried to remove something that wasn't there
                 return await finisher(
                     message.channel,
-                    f'Couldn\'t find that item in `{name_of_thing_to_check}`'
+                    f'Bu değeri `{name_of_thing_to_check}` listesinde bulamadım'
                 )
 
             # didn't say add or remove (we fell through the try)
             return await finisher(
                 message.channel,
-                'When editing a list, specify whether you are `add`ing or '
-                '`delete`ing an item before the item in question.\n\n'
-                'Example: `set invokers remove r!`'
+                'Bir listeyi düzenlerken ekleme mi çıkarma mı yaptığını '
+                'girdiden önce yazman lazım.\n\n'
+                'Örnek: `set invokers remove r!`'
             )
 
     return await finisher(
         message.channel,
-        'An unexpected error occurred.`'
+        'birtakım başarısızlıklar sözkonusu.`'
     )
 
 async def close(client):

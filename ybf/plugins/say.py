@@ -12,7 +12,7 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'Nothing to say provided.'
+                'Söyleyecek hiçbir şey sunulmadı.'
             )
         )
 
@@ -36,5 +36,8 @@ aliases = [
     'say',
     'xsay',
     'send',
-    'fakesend'
+    'fakesend',
+    'söyle',
+    'yolla',
+    'gönder'
 ]

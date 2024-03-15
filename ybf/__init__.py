@@ -50,7 +50,7 @@ class Client(discord.Client):
 
         # are we on the beta branch? if so, ignore the stable bot
         if self.user.id == settings.self['beta']:
-            print('Running in beta mode.')
+            print('Beta modunda çalışıyorum.')
             self.beta = True
         
         # cache the owner
@@ -68,7 +68,7 @@ class Client(discord.Client):
             channel = message.guild.get_channel(
                 settings.guild[message.guild.id]['channels']['bot_spam'])
             await channel.send(
-                f'**Mention Alert** in <#{message.channel.id}>.')
+                f'<#{message.channel.id}> kanalında **Etiket Uyarısı**.')
 
     def check_for_banned_messages(self, message):
         '''
@@ -230,8 +230,8 @@ class Client(discord.Client):
                     settings.guild[message.guild.id]['channels']['announcement'])
 
                 return await channel.send(
-                    '__***IMPORTANT***__\n'\
-                    f'*New post in <#{message.channel.id}>!!!*')
+                    '__***ÖNEMLİ***__\n'\
+                    f'*<#{message.channel.id}>\'de yeni duyuru var!!!*')
             
             # remove antiraid from trusted accounts
             if 'antiraid' in self.stored_roles[message.guild.id] and \
@@ -336,16 +336,16 @@ class Client(discord.Client):
                 description=msg)
 
             mbd.set_author(
-                name=f'{message.author.display_name} said...',
+                name=f'{message.author.display_name} dedi ki...',
                 icon_url=message.author.display_avatar.url)
 
             mbd.set_footer(
-                text='This message was automatically re-sent because it was '\
-                     'deleted too recently after it was sent.')
+                text='Bu mesaj otomatik olarak tekrar gönderildi '\
+                     'çünkü paylaşıldıktan kısa bir süre sonra silinmişti.')
 
             if message.attachments:
                 mbd.add_field(
-                    name='Attachments:',
+                    name='Ek sayısı:',
                     value=str(len(message.attachments)))
 
             await message.channel.send(embed=mbd)
@@ -429,7 +429,7 @@ class Client(discord.Client):
             raise
 
     async def close(self):
-        print('Closing')
+        print('Kapatılıyor...')
 
         # allow commands to save before close
         for plugin in commands.iterable:

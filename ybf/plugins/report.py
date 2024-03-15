@@ -28,11 +28,11 @@ async def ready(client):
             globals()['reports'] = json.load(data)
 
     except FileNotFoundError:
-        print('Ignoring JSON: file wasn\'t found')
+        print('JSON görmezden geliniyor: dosyayı bulamadım')
         # export = True
 
     except json.decoder.JSONDecodeError:
-        print('Ignoring JSON: Corrupt or empty file was loaded.')
+        print('JSON görmezden geliniyor: dosya boş veya bozuk.')
 
 async def command(client, message, command):
     message_deleted = False
@@ -45,16 +45,16 @@ async def command(client, message, command):
             await message.delete()
             message_deleted = True
         except discord.Forbidden:
-            msg = 'Unable to delete your message. Anonymity is not guaranteed.'
+            msg = 'Mesajınız silinemedi. Anonimliğinizi garanti edemiyorum.'
         except discord.NotFound:
-            msg = 'Unable to find your message. Anonymity is not guaranteed.'
+            msg = 'Mesajınızı bulamadım. Anonimliğinizi garanti edemiyorum.'
 
         if msg:
             await message.channel.send(
                 embed=client.embed_builder(
                     'warning',
                     msg,
-                    title='Warning'
+                    title='Uyarı'
                 )
             )
 
@@ -67,7 +67,7 @@ async def command(client, message, command):
             await message.author.send(
                 embed=client.embed_builder(
                     'error',
-                    'You must provide something to report.'
+                    'Rapor edecek bir şey sunman lazım.'
                 )
             )
         except discord.Forbidden:
@@ -75,7 +75,7 @@ async def command(client, message, command):
             await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    'Nothing was sent to report.'
+                    'Rapor namına hiçbir şey gönderilmedi.'
                 )
             )
         return
@@ -94,7 +94,7 @@ async def command(client, message, command):
                 break
 
     if not current_guild:
-        raise Exception('Guild Not Found')
+        raise Exception('Sunucu Bulunamadı')
         # This shouldn't happen.
 
     report_id = None
@@ -105,11 +105,11 @@ async def command(client, message, command):
         await message.author.send(
             embed=discord.Embed(
                 color=client.colors['warning'],
-                title='Please Re-Send Attachments',
-                description='**Your report has not been sent yet.**\n'
-                            'Your message included attachments that were '
-                            'deleted alongside it. Please reupload the '
-                            'attachment to this channel.'
+                title='Lütfen Dosyalarınızı Tekrar Yollayın',
+                description='**Raporunuz henüz gönderilmedi.**\n'
+                            'Mesajınız, mesajınızla beraber silinen dosyalar '
+                            'içeriyordu. Lütfen hepsini bu kanala '
+                            'tekrardan yükleyin.'
             )
         )
         def check(m):
@@ -127,9 +127,9 @@ async def command(client, message, command):
             '\n'.join([attachment.url for attachment in newmsg.attachments]),
             embed=discord.Embed(
                 color=client.colors['error'],
-                title='A report has been recieved.',
+                title='Bir rapor aldım.',
                 description=message.content.split(None, 1)[1]
-            ).set_footer(text='Any attachments have been included as URLs.')
+            ).set_footer(text='Bütün dosyalar URL olarak dâhil edildi.')
         )
 
     else:
@@ -140,9 +140,9 @@ async def command(client, message, command):
             '\n'.join([attachment.url for attachment in message.attachments]),
             embed=discord.Embed(
                 color=client.colors['error'],
-                title='A report has been recieved.',
+                title='Bir rapor aldım.',
                 description=message.content.split(None, 1)[1]
-            ).set_footer(text='Any attachments have been included as URLs.')
+            ).set_footer(text='Bütün dosyalar URL olarak dâhil edildi.')
         )
 
     globals()['reports'][str(report_id.id)] = message.author.id
@@ -153,10 +153,10 @@ async def command(client, message, command):
         return await message.author.send(
             embed=discord.Embed(
                 color=client.colors['default'],
-                title='Success',
-                description=f'Your report has been recieved. Report ID: {report_id.id}\n'
-                              'We will respond as soon as possible, and follow up if necessary.'
-                              'If your message is closed, you will be informed.'
+                title='Başarılı',
+                description=f'Raporunuz iletildi. Rapor ID\'si: {report_id.id}\n'
+                              'Size en kısa zamanda yanıt vermeye çalışacağız. '
+                              'Eğer raporunuz kapatılırsa bilgilendirileceksiniz.'
             )
         )
     except discord.Forbidden:
@@ -216,8 +216,8 @@ async def react(client, payload):
         return await bot_spam_channel.send(
             embed=client.embed_builder(
                 'error',
-                'Unable to modify report: User has left the server.'
-            ).set_footer(text='This report has been deleted.')
+                'Rapor düzenlenemiyor: Kullanıcı sunucudan ayrıldı.'
+            ).set_footer(text='Bu rapor silinmiştir.')
         )
     try:
         # close report
@@ -226,24 +226,24 @@ async def react(client, payload):
             await reporter.send(
                 embed=client.embed_builder(
                         payload.member.colour,
-                        'If you believe this to be in error, please send us another report with further information.',
-                        title=f'Report {payload.message_id} has been closed.'
-                    ).set_footer(icon_url=payload.member.display_avatar.url, text=f'Closed by {payload.member.display_name}.')
+                        'Bunun bir hata olduğunu düşünüyorsanız, lütfen bize daha detaylı bir tane daha rapor yollayın.',
+                        title=f'{payload.message_id} no\'lu rapor kapatıldı.'
+                    ).set_footer(icon_url=payload.member.display_avatar.url, text=f'{payload.member.display_name} tarafından kapatılmıştır.')
                 )
 
             await client.get_guild(payload.guild_id).get_channel(
                     settings.guild[payload.guild_id]['channels']['report']
-                ).send(f'Report {payload.message_id} has been **closed**.')
+                ).send(f'{payload.message_id} no\'lu rapor **kapatılmıştır**.')
 
             return reports.pop(str(payload.message_id))
 
         # send report
 
         editmsg = await bot_spam_channel.send(
-            f'**<@{payload.user_id}> You have selected to reply to report '
-            f'{payload.message_id}.**\n\nPlease enter your response in this '
-            'channel.\nThis times out after 3 minutes. You can cancel it by sending'
-            ' `cancel`'
+            f'**<@{payload.user_id}>, {payload.message_id} no\'lu rapora '
+            f'yanıt vermeyi seçtiniz.**\n\nLütfen cevabınızı bu kanala '
+            'gönderin.\n3 dakikanın ardından zaman aşımına uğrar. `cancel` veya `iptal` yazarak '
+            'iptal edebilirsiniz.'
         )
 
         def check(m):
@@ -251,7 +251,7 @@ async def react(client, payload):
                 m.channel == bot_spam_channel and
                 m.author.id == payload.user_id
             ):
-                if m.content.lower() == 'cancel':
+                if m.content.lower() == 'cancel' or m.content.lower() == 'iptal':
                     raise NameError
 
                 return True
@@ -259,17 +259,17 @@ async def react(client, payload):
         try:
             msg = await client.wait_for('message', timeout=180.0, check=check)
         except (asyncio.TimeoutError, NameError):
-            return await editmsg.edit(content=f'~~{editmsg.content}~~\n\nCancelled.')
+            return await editmsg.edit(content=f'~~{editmsg.content}~~\n\İptal edildi.')
 
         await reporter.send(
             embed=client.embed_builder(
                 msg.author.colour,
                 msg.content,
-                title=f'Reply to report {payload.message_id}:'
+                title=f'{payload.message_id} no\'lu rapora cevap:'
             ).set_footer(icon_url=msg.author.display_avatar.url, text=f'--{msg.author.display_name}')
         )
 
-        await bot_spam_channel.send('Reply sent successfully.')
+        await bot_spam_channel.send('Cevap başarıyla yollandı.')
 
         # reports.pop(str(payload.message_id) )
     
@@ -277,8 +277,8 @@ async def react(client, payload):
         return await bot_spam_channel.send(
             embed=client.embed_builder(
                 'error',
-                'Unable to send message to user: User is not accepting DMs.'
-            ).set_footer(text='This report has not been been deleted.')
+                'Kullanıcıya mesaj gönderilemiyor: DM\'lerini kapatmış.'
+            ).set_footer(text='Bu rapor silinemedi.')
         )
 
 async def close(client):
@@ -288,5 +288,6 @@ async def close(client):
 
 aliases = [
     'report',
+    'rapor'
     'r'
 ]

@@ -6,7 +6,10 @@ __pycache__/
 *.py[cod]
 
 # you probably want one of these
+venv/
 .venv/
+env/
+.env/
 
 # Files saved by YBF
 ybf/configs/*

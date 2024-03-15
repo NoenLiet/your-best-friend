@@ -28,7 +28,7 @@ def membercheck(client, message, context, data):
     # couldnt find any member with that id or name
     if member is None:
         raise ParameterException(
-            'No member found with given ID, name, or name/discriminator combo.'
+            'Verilen ID, isim vb. ile bir kullanıcı bulunamadı.'
         )
 
     # add that member to the list
@@ -54,7 +54,7 @@ def channelcheck(client, message, context, data):
         )
 
     if channel is None:
-        raise ParameterException('No channel found with given ID or mention.')
+        raise ParameterException('Verilen ID veya etiket ile bir kanal bulunamadı.')
 
     del context[:2]
 
@@ -71,7 +71,7 @@ def regexcheck(client, message, context, data):
         del context[:2]
     except re.error as error:
         raise ParameterException(
-            'Unable to compile regex.\n'
+            'Regex compile edilemiyor.\n'
             '```fix\n' + str(error) + '\n```'
         )
 
@@ -116,9 +116,9 @@ async def delete_from(client, context, data):
         return await context.channel.send(
             embed=client.embed_builder(
                 'error',
-                'Deleting messages from private channels is '
-                'unavailable. (Discord does not allow us to use the "purge" '
-                'backend in private channels.)'
+                'Özel kanallardan (DM veya grup) mesaj silmem '
+                'mümkün değil. (Discord özel kanallarda "purge" '
+                'kullanmaya izin vermiyor.)'
             )
         )
 
@@ -130,8 +130,8 @@ async def delete_from(client, context, data):
         return await context.channel.send(
             embed=client.embed_builder(
                 'error',
-                'You or I do not have permission to delete messages in the targeted '
-                'channel.'
+                'Ya sende ya da bende istediğin kanaldaki mesajları silme '
+                'yetkisi yok.'
             )
         )
 
@@ -140,7 +140,7 @@ async def delete_from(client, context, data):
         return await context.channel.send(
             embed=client.embed_builder(
                 'error',
-                'I cannot delete more than 9999 messages at a time.'
+                'Aynı anda 9999\'dan fazla mesaj silemem.'
             )
         )
 
@@ -253,10 +253,10 @@ async def delete_from(client, context, data):
 
     await context.channel.send(
         embed=discord.Embed(
-            description='*Deleted {} messages.*'.format(len(purged)),
-            title='Purge completed.',
+            description='*{} mesaj silindi.*'.format(len(purged)),
+            title='Purge tamamlandı.',
             color=discord.Color(0xBF4DFF)
-        ).set_footer(text='This message will delete itself in 5 seconds.'),
+        ).set_footer(text='Bu mesaj 5 saniye içinde kendini imha edecektir.'),
         delete_after=5
     )
 
@@ -294,7 +294,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    f'Unknown option: {context[0]}')
+                    f'Bilinmeyen seçenek: {context[0]}')
                 )
 
         try:
@@ -324,7 +324,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    f'Option `{context[0]}` was given no parameters.'
+                    f'`{context[0]}` seçeneğine parametre verilmedi.'
                 )
             )
 
@@ -333,7 +333,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    f'Unknown option: `{context[0]}`.'
+                    f'Bilinmeyen seçenek: `{context[0]}`.'
                 )
             )
 
@@ -342,7 +342,7 @@ async def command(client, message, command):
             return await message.channel.send(
                 embed=client.embed_builder(
                     'error',
-                    f'Error with option `{context[0]}`: {e}'
+                    f'`{context[0]}` seçeneği hata verdi: {e}'
                 )
             )
 
@@ -353,5 +353,6 @@ aliases = [
     'purge',
     'p',
     'n',
-    '-'
+    '-',
+    'yoket'
 ]

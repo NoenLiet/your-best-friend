@@ -1,7 +1,7 @@
 import disnake
 import ybf # import base necessities
 
-print('Starting up...')
+print('Başlatılıyor...')
 
 YBF = ybf.Client()
 

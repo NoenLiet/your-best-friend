@@ -9,8 +9,8 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'Not enough parameters: Provide a name or mention to get the '
-                'user\'s ID.'
+                'Yeterli parametre yok. Kullanıcının ID\'sini istiyorsan '
+                'isim veya etiket sunman gerek.'
             )
         )
 
@@ -28,8 +28,8 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'No member found with given mention, name, or '
-                'name/discriminator combo.'
+                'Verilen etiket veya isim ile bir '
+                'kullanıcı bulunamadı.'
             )
         )
 
@@ -37,11 +37,11 @@ async def command(client, message, command):
         member.id,
         embed=client.embed_builder(
             'default',
-            f'ID Displayed for user {member.name}',
-            title='ID Found'
+            f'{member.name} kullanıcısının ID\'sine bakılıyor',
+            title='ID bulundu'
         ).set_footer(
-            text='If this is not the right user, check to make sure '
-                 'you provided the correct discriminator.',
+            text='Bu kullanıcı aradığınız kişi değilse, doğru ismi veya etiketi '
+                 'sunduğunuzdan emin olun.',
             icon_url=member.avatar_url
         )
     )

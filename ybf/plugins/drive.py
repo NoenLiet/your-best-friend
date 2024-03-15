@@ -19,8 +19,8 @@ async def ready(client):
 
     except FileNotFoundError:
         print(
-            'Drive JSON not found. .drive will error!\n\n'
-            'Make a new one with '
+            'Drive JSON bulunamadı. .drive hata verecek!\n\n'
+            'Şöyle yenisini yapabilirsin: '
             '{ "default" : "url", "keys" : { "name" : "url" } }'
         )
 
@@ -29,7 +29,7 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'You are not allowed to view Google Drive URLs.'
+                'Google Drive URL\'lerini görüntüleme yetkiniz yok.'
             )
         )
 
@@ -37,8 +37,8 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'This command may only be called in the Staff category.\n'
-                'If you believe this to be an error, double check it with `set`.'
+                'Bu komut yalnızca Yetkili kategorisinde çalıştırılabilir.\n'
+                'Bunun hata olduğunu düşünüyorsanız, `set` komuduyla bi\' tekrar bakın.'
             )
         )
 
@@ -47,10 +47,10 @@ async def command(client, message, command):
     except IndexError:
         return await message.channel.send(
             embed=discord.Embed(
-                title='/r/Undertale',
+                title='/r/UndertaleTR',
                 url=drive['default'],
                 color=client.colors['default']
-            ).set_footer(text='Drive values cannot be set.'
+            ).set_footer(text='Drive değerleri atanamıyor.'
             ).set_thumbnail(url=folder)
         )
 
@@ -58,7 +58,7 @@ async def command(client, message, command):
         return await message.channel.send(
             embed=client.embed_builder(
                 'error',
-                'Vroom vroom...'
+                'Vınn vınn...'
             )
         )
 
@@ -68,17 +68,17 @@ async def command(client, message, command):
                 title=command[0].upper() + command[1:],
                 url=drive['keys'][command],
                 color=client.colors['default']
-            ).set_footer(text='Drive values cannot be set.'
+            ).set_footer(text='Drive değerleri atanamıyor.'
             ).set_thumbnail(url=document)
         )
 
     return await message.channel.send(
         embed=client.embed_builder(
             'error',
-            'Unknown drive URL. Valid URLs are:\n`{}`'.format(
+            'Bilinmeyen drive URL\'si. Geçerli URL\'ler:\n`{}`'.format(
                 list(drive['keys'].keys())
             )
-        ).set_footer(text='Drive values cannot be set.')
+        ).set_footer(text='Drive değerleri atanamıyor.')
     )
 
 # async def close(client):

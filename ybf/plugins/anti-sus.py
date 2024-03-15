@@ -5,4 +5,4 @@ async def join(client, member):
         await member.edit(roles=[client.stored_roles[message.guild.id]['antiraid']])
         if 'bot_spam' in settings.guild[member.guild.id]['channels']:
             channel = member.guild.get_channel(settings.guild[member.guild.id]['channels']['bot_spam'])
-            await channel.send(f'**Added antiraid role to** <@{member.id}>.')
+            await channel.send(f'**<@{member.id}> kullanıcısına anti-raid rolü verildi.')
