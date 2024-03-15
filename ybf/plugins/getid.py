@@ -42,7 +42,7 @@ async def command(client, message, command):
         ).set_footer(
             text='Bu kullanıcı aradığınız kişi değilse, doğru ismi veya etiketi '
                  'sunduğunuzdan emin olun.',
-            icon_url=member.avatar_url
+            icon_url=member.avatar
         )
     )
 
